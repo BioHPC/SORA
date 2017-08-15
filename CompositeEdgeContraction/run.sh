@@ -1,0 +1,1 @@
+/research/software/spark/spark-2.1.0-bin-hadoop2.7/bin/spark-submit --class CompositeEdgeContraction --master local[4] target/scala-2.11/Composite\ Edge\ Contraction\ Project-assembly-1.1.jar /research/SparkMetagenomeAnalysis/assembler/TCBB/CompositeEdgeContraction/data/test05_edge_list.txt

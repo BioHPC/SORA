@@ -1,0 +1,32 @@
+== How to run a standalone applicaiton using the Spark API ==
+
+# Your directory layout should look like this
+$ find .
+.
+./simple.sbt
+./src
+./src/main
+./src/main/scala
+./src/main/scala/SimpleApp.scala
+
+# Package a jar containing your application
+$ sbt package
+...
+[info] Packaging {..}/{..}/target/scala-2.10/simple-project_2.10-1.0.jar
+
+# Use spark-submit to run your application
+$ YOUR_SPARK_HOME/bin/spark-submit \
+  --class "SimpleApp" \
+  --master local[4] \
+  target/scala-2.10/simple-project_2.10-1.0.jar
+...
+Lines with a: 46, Lines with b: 23
+
+
+== Run Composite Edge Contraction program == 
+$ sbt package
+$ spark-submit --class "CompositeEdgeContraction" --master local[4] target/scala-2.11/Composite Edge Contraction Project-assembly-1.1.jar data/test05_edge_list.txt
+
+
+=> Run at Amazon
+Refer /home/thm/Software/spark-1.1.0/ec2/INSTRUCTION.txt
