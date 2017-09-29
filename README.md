@@ -27,7 +27,7 @@ An example using a test dataset:
 > {spark_home}/bin/spark-submit --class CompositeEdgeContraction --master local[4] target/scala-2.11/Composite\ Edge\ Contraction\ Project-assembly-1.1.jar data/test05_edge_list.txt SORA/resultsCEC/ ~/CECResults/
 ```
 
-# Transitive Edge Reduction 
+# Transitive Edge Reduction (Dead End Removal Incorporated)
 
 Transitive Edge Reduction (TRE) is a tool that can be used to remove redudant edges. In order to properly use this module you need to install the dependencies. The README in the main SORA directory describes what is needed.
 
