@@ -10,7 +10,7 @@ import org.graphframes._
 object CompositeEdgeContraction {
 
   val usage = """
-    Usage: CompositeEdgeContraction filename
+    Usage: CompositeEdgeContraction filename directory
   """
   //prints out dot format of edge RDD
   def toDot(e: EdgeRDD[String]) {
@@ -223,7 +223,7 @@ object CompositeEdgeContraction {
     }
 
     val markedGraph: Graph[(Long,Long),(String, Boolean)] = inOutGraph.mapTriplets(
-      triplet => if (triplet.dstAttr._2 == 0 && !(triplet.attr contains "$")) (triplet.attr, true) else (triplet.attr, false)
+      triplet => if (triplet.dstAttr._2 == 0) (triplet.attr, true) else (triplet.attr, false)
     )
 
     return Graph.fromEdges(markedGraph.subgraph(epred = e => e.attr._2 != true).edges.map(e => Edge(e.srcId, e.dstId, e.attr._1.replace(":$",""))),1)
@@ -238,17 +238,19 @@ object CompositeEdgeContraction {
 
     // if debug = 0, just print the final output
     // if debug = 1, print all intermediate results
-    val debug = 0 
+    val debug = 1
+
+    // Intialize edgeListFile
+    val edgeListFile = args(0)
+    val resultDirectory = args(1)
 
     // We pass the SparkContext constructor a SparkConf object which contains 
     // information about our application
     val conf = new SparkConf().setAppName("Composite Edge Contraction Module")
     // Initialize a SparkContext as part of the program
     val sc = new SparkContext(conf)
-    sc.setCheckpointDir("/research/SparkMetagenomeAnalysis/assembler/TCBB/CompositeEdgeContraction/temp")
-    // Intialize edgeListFile
-    // val edgeListFile = "data/test05_edge_list.txt"
-    val edgeListFile = args(0)
+    sc.setCheckpointDir("temp/")
+
 
     // Load edge list into graph
     val edges = sc.textFile(edgeListFile).flatMap { line =>
@@ -296,14 +298,9 @@ object CompositeEdgeContraction {
     println(s"Composite edge contraction done!")
     println(s"Number of edges of the graph after composite edge contraction: ${cecGraph.edges.count()}")
     println(s"")
-   
 
-  
    var edgeStr = cecGraph.edges.map(e => e.srcId.toString() + "\t" + e.dstId.toString() + "\t" + e.attr.toString().replaceAll(":","")) 
-  // edgeStr.saveAsTextFile("/research/SparkMetagenomeAnalysis/assembler/TCBB/results")
-   edgeStr.saveAsTextFile("s3://sparkbenchmarkemr/afterCEC")
+   edgeStr.saveAsTextFile(resultDirectory)
    println("File saved!") 
-
-  // cec2Graph.edges.foreach(println)  
   }
 }

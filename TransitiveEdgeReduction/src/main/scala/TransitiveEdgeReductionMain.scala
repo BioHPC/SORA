@@ -15,7 +15,7 @@ import collection.mutable.HashMap
 object TransitiveEdgeReduction{
 
   val usage = """
-    Usage: TransitiveEdgeReduction filename
+    Usage: TransitiveEdgeReduction filename directory
   """
 
   def main(args: Array[String]) {
@@ -36,8 +36,9 @@ object TransitiveEdgeReduction{
     val sc = new SparkContext(conf)
 
     // Intialize edgeListFile
-    // val edgeListFile = "data/3reads_overlap_beforeTransitiveEdgeReduction_edge_list.txt"
     val edgeListFile = args(0)
+    val resultDirectory = args(1)
+
 
     // Load edge list into graph
     val edges = sc.textFile(edgeListFile).flatMap { line =>
@@ -241,11 +242,8 @@ object TransitiveEdgeReduction{
     println(s"Number of edges of the graph after transitive edge reduction: ${remainedGraph.edges.count()}")
     println(s"")
 
-    //remainedGraph.edges.foreach(println)
-
     var edgeStr = remainedGraph.edges.map(e => e.srcId.toString() + "\t" + e.dstId.toString() + "\t" + e.attr._1.toString().replaceAll(":",""))
-   // edgeStr.saveAsTextFile("/research/SparkMetagenomeAnalysis/assembler/TCBB/TransitiveEdgeReduction/data/afterTER")
-    edgeStr.saveAsTextFile("s3://sparkbenchmarkemr/afterTER")
+    edgeStr.saveAsTextFile(resultDirectory)
     println("File saved!")
   }
 }

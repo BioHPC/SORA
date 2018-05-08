@@ -1,4 +1,0 @@
-
-Run Transitive Edge Reduction
-=============================
-{spark_home}/bin/spark-submit --class TransitiveEdgeReduction --master local[4] target/scala-2.10/transitive-edge-reduction-module_2.10-1.0.jar data/3reads_overlap_beforeTransitiveEdgeReduction_edge_list.txt
